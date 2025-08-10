@@ -16,7 +16,6 @@ import {
   Twitter,
   Linkedin,
   Mail,
-  ChevronDown,
   Code,
   TestTube,
   Rocket,
@@ -43,7 +42,7 @@ const fadeIn = {
 export default function LandingPage() {
   const [email, setEmail] = useState("")
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [scrollY, setScrollY] = useState(0)
+  const [, setScrollY] = useState(0)
   const lastScrollYRef = useRef(0)
   const [navHidden, setNavHidden] = useState(false)
 
@@ -238,7 +237,7 @@ export default function LandingPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-2 text-gray-900">Language & Cultural Barriers</h3>
                     <p className="text-gray-600">
-                      Customers can't communicate effectively in their native languages, leading to frustration and lost
+                      Customers can&apos;t communicate effectively in their native languages, leading to frustration and lost
                       business opportunities.
                     </p>
                   </div>
@@ -646,7 +645,7 @@ export default function LandingPage() {
             <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 tracking-tight text-white">
               Be Among the First
             </h2>
-            <p className="text-lg md:text-xl text-emerald-100 mb-12 max-w-3xl mx-auto leading-relaxed font-body">
+            <p className="text-xl md:text-2xl text-emerald-100 mb-12 max-w-3xl mx-auto leading-relaxed font-body">
               Join the exclusive waitlist and get early access to the future of African call center technology.
             </p>
 
@@ -804,11 +803,13 @@ export default function LandingPage() {
             >
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 rounded-2xl overflow-hidden shadow-2xl">
                 {missionImages.map((img, index) => (
-                  <img
+                  <Image
                     key={img + index}
                     src={`/${img}`}
                     alt="African people and culture"
                     className="w-full h-28 sm:h-32 md:h-36 lg:h-40 object-cover rounded-md"
+                    width={300}
+                    height={200}
                     loading="lazy"
                   />
                 ))}
@@ -827,7 +828,7 @@ export default function LandingPage() {
               Ready to Transform Your Call Operations?
             </h2>
             <p className="text-xl text-gray-700 leading-relaxed mb-8 font-body max-w-3xl mx-auto">
-              Don't let language barriers and high costs hold your business back. Join hundreds of African businesses
+              Don&apos;t let language barriers and high costs hold your business back. Join hundreds of African businesses
               preparing to revolutionize their customer service with AI.
             </p>
 
