@@ -43,12 +43,13 @@ export function AnimatedTextCycle({ words, interval = 3000, className = "" }: An
     hidden: {
       y: -20,
       opacity: 0,
-      filter: "blur(8px)",
+      // Use style prop for filter instead of variants
+      // filter: "blur(8px)",
     },
     visible: {
       y: 0,
       opacity: 1,
-      filter: "blur(0px)",
+      // filter: "blur(0px)",
       transition: {
         duration: 0.4,
         ease: "easeOut",
@@ -57,7 +58,7 @@ export function AnimatedTextCycle({ words, interval = 3000, className = "" }: An
     exit: {
       y: 20,
       opacity: 0,
-      filter: "blur(8px)",
+      // filter: "blur(8px)",
       transition: {
         duration: 0.3,
         ease: "easeIn",
@@ -96,7 +97,28 @@ export function AnimatedTextCycle({ words, interval = 3000, className = "" }: An
           <motion.span
             key={currentIndex}
             className={`inline-block font-bold ${className}`}
-            variants={containerVariants}
+            variants={{
+              hidden: {
+                y: -20,
+                opacity: 0,
+              },
+              visible: {
+                y: 0,
+                opacity: 1,
+                transition: {
+                  duration: 0.4,
+                  ease: "easeOut" as const,
+                }
+              },
+              exit: {
+                y: 20,
+                opacity: 0,
+                transition: {
+                  duration: 0.3,
+                  ease: "easeIn" as const,
+                }
+              }
+            }}
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -104,6 +126,7 @@ export function AnimatedTextCycle({ words, interval = 3000, className = "" }: An
               whiteSpace: "nowrap",
               width: "100%",
               textAlign: "center", // Center align the text
+              filter: currentIndex !== null ? "blur(0px)" : "blur(8px)",
             }}
           >
             {words[currentIndex]}
