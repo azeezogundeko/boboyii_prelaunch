@@ -1,6 +1,12 @@
+# Next.js Project with Docker Support
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
+
+You can run this application either locally or using Docker.
+
+### Local Development
 
 First, run the development server:
 
@@ -12,6 +18,27 @@ yarn dev
 pnpm dev
 # or
 bun dev
+```
+
+### Docker Development
+
+To run the application using Docker:
+
+1. Build the Docker image:
+```bash
+docker compose build
+```
+
+2. Start the container:
+```bash
+docker compose up
+```
+
+The application will be available at [http://localhost:3000](http://localhost:3000).
+
+To stop the container:
+```bash
+docker compose down
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
