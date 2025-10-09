@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "3002:3002"
+    expose:
+      - "3002"
     environment:
       - NODE_ENV=production
     restart: always
@@ -14,3 +14,7 @@ services:
       - .:/app
       - /app/node_modules
       - /app/.next
+
+  networks:
+    dokploy-network:
+      external: true
