@@ -14,7 +14,9 @@ services:
       - .:/app
       - /app/node_modules
       - /app/.next
+    networks:
+      - dokploy-network
 
-  networks:
-    dokploy-network:
-      external: true
+networks:
+  dokploy-network:
+    external: true
