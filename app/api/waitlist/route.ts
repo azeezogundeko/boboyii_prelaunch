@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
 
       // Check manually if email exists (since Appwrite query might need adjustment)
       const emailExists = existingUsers.documents.some(
-        (doc: any) => doc.email === normalizedEmail
+        (doc) => (doc as unknown as { email: string }).email === normalizedEmail
       );
 
       if (emailExists) {
@@ -84,28 +84,30 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error('Waitlist API error:', error);
 
     // Handle specific Appwrite errors
-    if (error?.code === 401) {
-      return NextResponse.json(
-        { error: 'Appwrite authentication failed. Check your API key.' },
-        { status: 500 }
-      );
-    }
+    if (error && typeof error === 'object' && 'code' in error) {
+      if (error.code === 401) {
+        return NextResponse.json(
+          { error: 'Appwrite authentication failed. Check your API key.' },
+          { status: 500 }
+        );
+      }
 
-    if (error?.code === 404) {
-      return NextResponse.json(
-        { error: 'Appwrite database or collection not found. Please check your configuration.' },
-        { status: 500 }
-      );
+      if (error.code === 404) {
+        return NextResponse.json(
+          { error: 'Appwrite database or collection not found. Please check your configuration.' },
+          { status: 500 }
+        );
+      }
     }
 
     return NextResponse.json(
       {
         error: 'Failed to join waitlist. Please try again later.',
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+        details: process.env.NODE_ENV === 'development' && error instanceof Error ? error.message : undefined,
       },
       { status: 500 }
     );
@@ -113,7 +115,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Optional: GET endpoint to retrieve waitlist count (for admin purposes)
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const { databases } = createAdminClient();
 
@@ -128,13 +130,13 @@ export async function GET(request: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error('Waitlist GET error:', error);
 
     return NextResponse.json(
       {
         error: 'Failed to retrieve waitlist count.',
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+        details: process.env.NODE_ENV === 'development' && error instanceof Error ? error.message : undefined,
       },
       { status: 500 }
     );

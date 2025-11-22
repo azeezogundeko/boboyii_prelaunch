@@ -110,8 +110,8 @@ export default function LandingPage() {
 
       // Reset success message after 5 seconds
       setTimeout(() => setIsSubmitted(false), 5000)
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong. Please try again.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
 
       // Clear error after 5 seconds
       setTimeout(() => setError(""), 5000)
@@ -733,7 +733,7 @@ export default function LandingPage() {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-4 p-4 bg-white/20 border border-white/50 rounded-xl text-white text-sm"
                 >
-                  Successfully joined the waitlist! We'll be in touch soon.
+                  Successfully joined the waitlist! We&apos;ll be in touch soon.
                 </motion.div>
               )}
             </div>
