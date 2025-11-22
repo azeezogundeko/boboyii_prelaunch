@@ -84,13 +84,18 @@ export default function LandingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('Form submitted with email:', email)
 
-    if (!email) return
+    if (!email) {
+      console.log('No email provided, returning')
+      return
+    }
 
     setIsLoading(true)
     setError("")
 
     try {
+      console.log('Sending request to /api/waitlist')
       const response = await fetch('/api/waitlist', {
         method: 'POST',
         headers: {
@@ -99,7 +104,9 @@ export default function LandingPage() {
         body: JSON.stringify({ email }),
       })
 
+      console.log('Response status:', response.status)
       const data = await response.json()
+      console.log('Response data:', data)
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to join waitlist')
@@ -111,6 +118,7 @@ export default function LandingPage() {
       // Reset success message after 5 seconds
       setTimeout(() => setIsSubmitted(false), 5000)
     } catch (err) {
+      console.error('Error submitting form:', err)
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
 
       // Clear error after 5 seconds
