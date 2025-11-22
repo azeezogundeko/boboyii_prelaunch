@@ -178,16 +178,44 @@ When deploying to production (Vercel, Netlify, etc.):
 
 If using Docker (as configured in this project):
 
-1. Create a `.env` file for Docker with the same variables
-2. Update `docker-compose.yml` to include environment variables:
-   ```yaml
-   environment:
-     - NEXT_PUBLIC_APPWRITE_ENDPOINT=${NEXT_PUBLIC_APPWRITE_ENDPOINT}
-     - NEXT_PUBLIC_APPWRITE_PROJECT_ID=${NEXT_PUBLIC_APPWRITE_PROJECT_ID}
-     - APPWRITE_API_KEY=${APPWRITE_API_KEY}
-     - NEXT_PUBLIC_APPWRITE_DATABASE_ID=${NEXT_PUBLIC_APPWRITE_DATABASE_ID}
-     - NEXT_PUBLIC_APPWRITE_WAITLIST_COLLECTION_ID=${NEXT_PUBLIC_APPWRITE_WAITLIST_COLLECTION_ID}
+1. **Create a `.env` file** in the project root (same directory as `docker-compose.yml`):
+   ```bash
+   cp .env.example .env
    ```
+
+2. **Fill in your Appwrite credentials** in the `.env` file:
+   ```env
+   NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
+   NEXT_PUBLIC_APPWRITE_PROJECT_ID=your_project_id_here
+   APPWRITE_API_KEY=your_api_key_here
+   NEXT_PUBLIC_APPWRITE_DATABASE_ID=your_database_id_here
+   NEXT_PUBLIC_APPWRITE_WAITLIST_COLLECTION_ID=your_collection_id_here
+   ```
+
+3. **The `docker-compose.yml` is already configured** to pass these environment variables to the container
+
+4. **Build and start the container**:
+   ```bash
+   docker-compose up --build -d
+   ```
+
+5. **View logs** to ensure it's working:
+   ```bash
+   docker-compose logs -f web
+   ```
+
+6. **Test the API** (replace with your actual domain/port):
+   ```bash
+   curl -X POST http://localhost:3002/api/waitlist \
+     -H "Content-Type: application/json" \
+     -d '{"email":"test@example.com"}'
+   ```
+
+**Important Notes for Docker:**
+- The `.env` file must be in the same directory as `docker-compose.yml`
+- Docker Compose automatically loads variables from `.env` and passes them to the container
+- Make sure `.env` is in your `.gitignore` (it already is)
+- If you update environment variables, rebuild the container: `docker-compose up --build -d`
 
 ## Troubleshooting
 
