@@ -699,30 +699,32 @@ export default function LandingPage() {
                   className="flex-1 bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder-emerald-200 focus:border-white focus:ring-white h-14 text-lg rounded-2xl"
                   required
                 />
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button
-                    type="submit"
-                    className="bg-white text-emerald-700 hover:bg-emerald-50 px-8 py-4 h-14 text-lg font-semibold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={isSubmitted || isLoading}
-                  >
-                    {isSubmitted ? (
-                      <>
-                        <Check className="h-5 w-5 mr-2" />
-                        Joined!
-                      </>
-                    ) : isLoading ? (
-                      <>
-                        <div className="h-5 w-5 mr-2 border-2 border-emerald-700 border-t-transparent rounded-full animate-spin" />
-                        Joining...
-                      </>
-                    ) : (
-                      <>
-                        Join Waitlist
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                      </>
-                    )}
-                  </Button>
-                </motion.div>
+                <Button
+                  type="submit"
+                  onClick={() => {
+                    console.log('Button clicked!')
+                    // Form will handle submission via onSubmit
+                  }}
+                  className="bg-white text-emerald-700 hover:bg-emerald-50 px-8 py-4 h-14 text-lg font-semibold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95"
+                  disabled={isSubmitted || isLoading}
+                >
+                  {isSubmitted ? (
+                    <>
+                      <Check className="h-5 w-5 mr-2" />
+                      Joined!
+                    </>
+                  ) : isLoading ? (
+                    <>
+                      <div className="h-5 w-5 mr-2 border-2 border-emerald-700 border-t-transparent rounded-full animate-spin" />
+                      Joining...
+                    </>
+                  ) : (
+                    <>
+                      Join Waitlist
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </>
+                  )}
+                </Button>
               </form>
 
               {/* Success/Error Messages */}
