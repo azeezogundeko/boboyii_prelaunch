@@ -84,6 +84,7 @@ export default function LandingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    alert('NEW CODE: Form handler called!')
     console.log('Form submitted with email:', email)
 
     if (!email) {
