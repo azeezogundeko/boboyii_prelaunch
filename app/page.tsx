@@ -42,6 +42,8 @@ const fadeIn = {
 export default function LandingPage() {
   const [email, setEmail] = useState("")
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
   const [, setScrollY] = useState(0)
   const lastScrollYRef = useRef(0)
   const [navHidden, setNavHidden] = useState(false)
@@ -80,12 +82,41 @@ export default function LandingPage() {
     "pexels-topeasokere-5789327.jpg",
   ]
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (email) {
+
+    if (!email) return
+
+    setIsLoading(true)
+    setError("")
+
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to join waitlist')
+      }
+
       setIsSubmitted(true)
-      // Here you would typically send the email to your backend
-      setTimeout(() => setIsSubmitted(false), 3000)
+      setEmail("")
+
+      // Reset success message after 5 seconds
+      setTimeout(() => setIsSubmitted(false), 5000)
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong. Please try again.')
+
+      // Clear error after 5 seconds
+      setTimeout(() => setError(""), 5000)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -663,13 +694,18 @@ export default function LandingPage() {
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
                     type="submit"
-                    className="bg-white text-emerald-700 hover:bg-emerald-50 px-8 py-4 h-14 text-lg font-semibold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl"
-                    disabled={isSubmitted}
+                    className="bg-white text-emerald-700 hover:bg-emerald-50 px-8 py-4 h-14 text-lg font-semibold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isSubmitted || isLoading}
                   >
                     {isSubmitted ? (
                       <>
                         <Check className="h-5 w-5 mr-2" />
                         Joined!
+                      </>
+                    ) : isLoading ? (
+                      <>
+                        <div className="h-5 w-5 mr-2 border-2 border-emerald-700 border-t-transparent rounded-full animate-spin" />
+                        Joining...
                       </>
                     ) : (
                       <>
@@ -680,6 +716,26 @@ export default function LandingPage() {
                   </Button>
                 </motion.div>
               </form>
+
+              {/* Success/Error Messages */}
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-4 p-4 bg-red-500/20 border border-red-500/50 rounded-xl text-white text-sm"
+                >
+                  {error}
+                </motion.div>
+              )}
+              {isSubmitted && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-4 p-4 bg-white/20 border border-white/50 rounded-xl text-white text-sm"
+                >
+                  Successfully joined the waitlist! We'll be in touch soon.
+                </motion.div>
+              )}
             </div>
 
             {/* Benefits Grid */}
